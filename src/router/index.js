@@ -20,11 +20,18 @@ const router = createRouter({
       meta: { transition: 'slide-fade' }
     },
     {
+      path: '/relation',
+      name: 'Relation',
+      component: () => import('../views/Relation.vue'),
+      meta: { transition: 'slide-fade' }
+    },
+    {
       path: '/documentation',
       name: 'Documentation',
       component: () => import('../views/Documentation.vue'),
       meta: { transition: 'slide-fade' }
     }
+    
   ]
 })
 

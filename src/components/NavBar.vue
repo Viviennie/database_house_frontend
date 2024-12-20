@@ -16,6 +16,10 @@
       <el-icon><Connection /></el-icon>
       电影溯源
     </el-menu-item>
+    <el-menu-item index="/relation">
+      <el-icon><Phone/></el-icon>
+      演员和导演关系查询
+    </el-menu-item>
     <el-menu-item index="/documentation">
       <el-icon><Document /></el-icon>
       项目文档
@@ -26,7 +30,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { Search, Connection, Document } from '@element-plus/icons-vue'
+import { Search, Connection, Document,Phone } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const activeIndex = ref(route.path)
