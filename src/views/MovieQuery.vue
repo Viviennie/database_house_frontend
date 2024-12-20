@@ -89,41 +89,38 @@
           <el-tab-pane label="分布式数据库的结果">
             <el-table :data="dr" style="width: 100%; height: 600px;">
               <el-table-column prop="movie_name" label="电影名字" />
-              <!-- <el-table-column prop="movieId" label="电影ID" />
-              <el-table-column prop="directors" label="导演" />
-              <el-table-column prop="actors" label="演员" /> -->
               <el-table-column prop="movie_release_time" label="电影上映时间"  />
               <el-table-column prop="movie_score" label="电影评分"  :formatter="formatScore" />
-              <!-- <el-table-column prop="versions" label="版本" />
-              <el-table-column prop="style" label="风格" />
-              <el-table-column prop="asin" label="ASIN码" /> -->
             </el-table>
+            <el-row >
+              <el-col :span="24">
+                <div>结果总数：{{ len[0]}}</div>
+              </el-col>
+            </el-row>
           </el-tab-pane>
           <el-tab-pane label="关系数据库的结果">
             <el-table :data="rr" style="width: 100%; height: 600px;">
               <el-table-column prop="movie_name" label="电影名字" />
-              <!-- <el-table-column prop="movieId" label="电影ID" />
-              <el-table-column prop="directors" label="导演" />
-              <el-table-column prop="actors" label="演员" /> -->
               <el-table-column prop="movie_release_time" label="电影上映时间"  />
               <el-table-column prop="movie_score" label="电影评分"  :formatter="formatScore" />
-              <!-- <el-table-column prop="versions" label="版本" />
-              <el-table-column prop="style" label="风格" />
-              <el-table-column prop="asin" label="ASIN码" /> -->
             </el-table>
+            <el-row >
+              <el-col :span="24">
+                <div>结果总数：{{ len[1] }}</div>
+              </el-col>
+            </el-row>
           </el-tab-pane>
           <el-tab-pane label="图数据库的结果">
             <el-table :data="gr" style="width: 100%; height: 600px;">
               <el-table-column prop="movie_name" label="电影名字" />
-              <!-- <el-table-column prop="movieId" label="电影ID" />
-              <el-table-column prop="directors" label="导演" />
-              <el-table-column prop="actors" label="演员" /> -->
               <el-table-column prop="movie_release_time" label="电影上映时间"  />
               <el-table-column prop="movie_score" label="电影评分"  :formatter="formatScore" />
-              <!-- <el-table-column prop="versions" label="版本" />
-              <el-table-column prop="style" label="风格" />
-              <el-table-column prop="asin" label="ASIN码" /> -->
             </el-table>
+            <el-row >
+              <el-col :span="24">
+                <div>结果总数：{{ len[2] }}</div>
+              </el-col>
+            </el-row>
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -161,12 +158,12 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted} from 'vue'
 import * as echarts from 'echarts'
 import { fetchDistributedData } from '../api/distributedService'
 import { fetchRelationalData } from '../api/relationalService'
 import { fetchGraphData } from '../api/graphService'
-import { ElMention, ElMessage, formatter } from 'element-plus'
+import {ElMessage } from 'element-plus'
 
 const queryForm = reactive({
   name: '',
@@ -187,6 +184,7 @@ const graphlog=ref("暂无日志")
 const rr=ref([])
 const dr=ref([])
 const gr=ref([])
+const len=ref([0,0,0])
 
 const validateScoreRange = () => {
   if (queryForm.score[1] < queryForm.score[0]) {
@@ -228,12 +226,14 @@ const handleSubmit = async () => {
     a=distributedResponse.data.time
     dr.value =distributedResponse.data.results
     fenbulog.value=distributedResponse.data.report
+    len.value[0]=distributedResponse.data.num
     ElMessage({message:"分布式数据库查询成功",type: 'success'})
   }
 
   if (relationalResponse && relationalResponse.data ) {
     b=relationalResponse.data.time
     rr.value =relationalResponse.data.results
+    len.value[1]=relationalResponse.data.len
     ElMessage({message:"关系型数据库查询成功",type: 'success'})
   }
 
@@ -241,6 +241,7 @@ const handleSubmit = async () => {
     c=graphResponse.data.time
     gr.value =graphResponse.data.results
     graphlog.value=graphResponse.data.report
+    len.value[2]=graphResponse.data.num
     ElMessage({message: '图数据库查询成功',type: 'success'})
   }
   updateChart([
@@ -284,8 +285,6 @@ onMounted(() => {
 function formatScore(row, column, cellValue) {
     return cellValue ? cellValue.toFixed(2) : '-';
   }
-
-
 </script>
 
 <style scoped>

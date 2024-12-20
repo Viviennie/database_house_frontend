@@ -1,5 +1,5 @@
 <template>
-  <div class="trace-container">
+  <div class="trace-container" v-loading="loading">
     <el-card class="trace-form">
       <template #header>
         <div class="card-header">
@@ -7,19 +7,11 @@
         </div>
       </template>
       
-      <el-form :model="traceForm" label-width="120px">
-        <el-form-item label="电影名称">
-          <el-input v-model="traceForm.name" placeholder="请输入电影名称" />
-        </el-form-item>
-        
-        <el-form-item label="上映时间">
-          <el-date-picker
-            v-model="traceForm.releaseDate"
-            type="daterange"
-            range-separator="——"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          />
+      <el-form :model="traceForm" label-width="120px" >
+        <el-form-item label="电影名称" >
+          <div style="width: 400px;">
+            <el-input v-model="traceForm" placeholder="请输入电影名称" clearable />
+          </div>
         </el-form-item>
         
         <el-form-item>
@@ -28,63 +20,94 @@
       </el-form>
     </el-card>
 
-    <el-card v-if="showResults" class="trace-results">
+    <el-card  class="trace-results">
       <template #header>
         <div class="card-header">
           <span>溯源结果</span>
         </div>
       </template>
-      <el-table :data="traceResults" style="width: 100%">
-        <el-table-column prop="name" label="电影名称" />
-        <el-table-column prop="releaseDate" label="上映时间" />
-        <el-table-column prop="asin" label="ASIN码" />
+      <el-table :data="traceResults" style="width: 100%;height:600px;">
+        <el-table-column prop="movie_name" label="电影名称" />
+        <el-table-column prop="movie_release_time" label="上映时间" />
+        <el-table-column prop="score" label="电影评分"  :formatter="formatScore"/>
+        <el-table-column label="ASIN码" >
+          <template #default="{ row }">
+            <div>
+              <div v-for="i in row.version" >
+                <span>{{ i }}</span>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
       </el-table>
+      <el-row >
+        <el-col :span="24">
+          <div>结果总数：{{ len}}</div>
+        </el-col>
+      </el-row>
     </el-card>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { fetchRelationalData } from '../api/relationalService'
-import { fetchDistributedData } from '../api/distributedService'
+import { ref} from 'vue'
+import { traceRelationalData } from '../api/relationalService'
+import { ElMessage } from 'element-plus';
 
-const traceForm = reactive({
-  name: '',
-  releaseDate: []
-})
-
-const showResults = ref(false)
+const traceForm = ref('')
+let loading=ref(false)
 const traceResults = ref([])
-
+let len=ref(0)
 const handleTrace = async () => {
+  loading.value=true
   try {
     const response = await Promise.race([
-      fetchRelationalData(traceForm),
-      fetchDistributedData(traceForm)
+      traceRelationalData(traceForm),
     ])
+    traceResults.value = response.data.data
+    len.value=response.data.len
+    ElMessage.success("溯源查询成功")
 
-    traceResults.value = response.data.results
-    showResults.value = true
   } catch (error) {
-    console.error('溯源查询失败:', error)
-    // ElMessage.error('溯源查询失败，请稍后重试')
+    ElMessage.error("溯源查询失败，请稍后重试")
+  }
+  finally{
+    loading.value=false
   }
 }
+function formatScore(row, column, cellValue) {
+    return cellValue ? cellValue.toFixed(2) : '-';
+  }
+
 </script>
 
 <style scoped>
 .trace-container {
   padding: 80px 20px 20px;
-  max-width: 1200px;
-  height: 90vh;
+  width: 100%;
+  height: 1000px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .trace-form {
   margin-bottom: 20px;
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .card-header {
   font-weight: bold;
+}
+
+.trace-results{
+  width: 1200px;
+
 }
 </style> 

@@ -18,7 +18,7 @@
     </el-menu-item>
     <el-menu-item index="/relation">
       <el-icon><Phone/></el-icon>
-      演员和导演关系查询
+      合作关系
     </el-menu-item>
     <el-menu-item index="/documentation">
       <el-icon><Document /></el-icon>

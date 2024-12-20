@@ -28,3 +28,11 @@ export const fetchRelationalData = (queryForm) => {
   // 执行 GET 请求，将查询字符串附加到 URL 中
   return relationalClient.get(`/query_movie?${queryString}`);
 }; 
+export const traceRelationalData = (p) => {
+  // 执行 GET 请求，将查询字符串附加到 URL 中
+  const q={
+    movie_name: p.value
+  }
+  const queryString = new URLSearchParams(q).toString();
+  return relationalClient.get(`/traceability?${queryString}`);
+}; 
