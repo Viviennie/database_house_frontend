@@ -68,7 +68,7 @@
             v-model="queryForm.limit"
             :step="50"
             controls-position="right"
-            placeholder="最高分"
+            placeholder="结果显示数量"
           />
         </el-form-item>
         <el-form-item>
@@ -228,6 +228,7 @@ const handleSubmit = async () => {
     a=distributedResponse.data.time
     dr.value =distributedResponse.data.results
     fenbulog.value=distributedResponse.data.report
+    b = distributedResponse.data.query_time * 1000
     ElMessage({message:"分布式数据库查询成功",type: 'success'})
   }
 
@@ -281,10 +282,23 @@ onMounted(() => {
   })
 })
 
-function formatScore(row, column, cellValue) {
-    return cellValue ? cellValue.toFixed(2) : '-';
+const formatScore = (row, column, cellValue) => {
+  // 如果值为 null 或 undefined
+  if (cellValue == null) {
+    return '-';
   }
-
+  
+  // 转换为数字（确保处理字符串类型的分数）
+  const score = parseFloat(cellValue);
+  
+  // 检查是否是有效数字
+  if (isNaN(score)) {
+    return '-';
+  }
+  
+  // 返回格式化后的分数
+  return score.toFixed(2);
+}
 
 </script>
 
