@@ -1,5 +1,5 @@
 <template>
-  <div class="query-container">
+  <div class="query-container" v-loading="loading">
     <el-card class="query-form">
       <template #header>
         <div class="card-header">
@@ -63,7 +63,14 @@
             @change="validateScoreRange"
           />
         </el-form-item>
-        
+        <el-form-item label="结果显示数量">
+          <el-input-number
+            v-model="queryForm.limit"
+            :step="50"
+            controls-position="right"
+            placeholder="最高分"
+          />
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSubmit">查询</el-button>
         </el-form-item>
@@ -71,52 +78,83 @@
     </el-card>
 
     <!-- 查询结果展示 -->
-    <div v-if="showResults" class="results-container">
+    <div v-if=true class="results-container">
       <el-card class="result-list">
         <template #header>
           <div class="card-header">
             <span>查询结果</span>
           </div>
         </template>
-        <el-table :data="searchResults" style="width: 100%">
-          <el-table-column prop="name" label="电影名称" />
-          <el-table-column prop="releaseDate" label="上映时间" />
-          <!-- <el-table-column prop="movieId" label="电影ID" />
-          <el-table-column prop="directors" label="导演" />
-          <el-table-column prop="actors" label="演员" /> -->
-          <el-table-column prop="score" label="评分" />
-          <!-- <el-table-column prop="versions" label="版本" />
-          <el-table-column prop="style" label="风格" />
-          <el-table-column prop="asin" label="ASIN码" /> -->
-        </el-table>
+        <el-tabs >
+          <el-tab-pane label="分布式数据库的结果">
+            <el-table :data="dr" style="width: 100%; height: 600px;">
+              <el-table-column prop="movie_name" label="电影名字" />
+              <!-- <el-table-column prop="movieId" label="电影ID" />
+              <el-table-column prop="directors" label="导演" />
+              <el-table-column prop="actors" label="演员" /> -->
+              <el-table-column prop="movie_release_time" label="电影上映时间"  />
+              <el-table-column prop="movie_score" label="电影评分"  :formatter="formatScore" />
+              <!-- <el-table-column prop="versions" label="版本" />
+              <el-table-column prop="style" label="风格" />
+              <el-table-column prop="asin" label="ASIN码" /> -->
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="关系数据库的结果">
+            <el-table :data="rr" style="width: 100%; height: 600px;">
+              <el-table-column prop="movie_name" label="电影名字" />
+              <!-- <el-table-column prop="movieId" label="电影ID" />
+              <el-table-column prop="directors" label="导演" />
+              <el-table-column prop="actors" label="演员" /> -->
+              <el-table-column prop="movie_release_time" label="电影上映时间"  />
+              <el-table-column prop="movie_score" label="电影评分"  :formatter="formatScore" />
+              <!-- <el-table-column prop="versions" label="版本" />
+              <el-table-column prop="style" label="风格" />
+              <el-table-column prop="asin" label="ASIN码" /> -->
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="图数据库的结果">
+            <el-table :data="gr" style="width: 100%; height: 600px;">
+              <el-table-column prop="movie_name" label="电影名字" />
+              <!-- <el-table-column prop="movieId" label="电影ID" />
+              <el-table-column prop="directors" label="导演" />
+              <el-table-column prop="actors" label="演员" /> -->
+              <el-table-column prop="movie_release_time" label="电影上映时间"  />
+              <el-table-column prop="movie_score" label="电影评分"  :formatter="formatScore" />
+              <!-- <el-table-column prop="versions" label="版本" />
+              <el-table-column prop="style" label="风格" />
+              <el-table-column prop="asin" label="ASIN码" /> -->
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
       </el-card>
 
       <el-card class="performance-chart">
         <template #header>
           <div class="card-header">
             <span>性能比较</span>
-            <el-button type="text" @click="toggleLogs" style="float: right;">点击查看日志</el-button>
           </div>
         </template>
         <div ref="chartRef" style="height: 400px"></div>
       </el-card>
 
-      <el-card v-if="showLogs" class="logs-card">
+      <el-card v-if=true class="logs-card">
         <template #header>
           <div class="card-header" label-width="120px">
             <span>查询日志</span>
           </div>
         </template>
-        <div v-for="(log, index) in paginatedLogs" :key="index" class="log-entry">
-          <pre>{{ log }}</pre>
-        </div>
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="logs.length"
-          :page-size="1"
-          @current-change="handlePageChange"
-        />
+        <el-tabs >
+          <el-tab-pane label="分布式数据库的日志">
+            <div style="max-width: 100%;overflow-x: auto;">
+              <pre>{{fenbulog}}</pre>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="图数据库的日志">
+            <div style="max-width: 100%;overflow-x: auto;">
+              <pre>{{ graphlog }}</pre>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
       </el-card>
     </div>
   </div>
@@ -128,25 +166,27 @@ import * as echarts from 'echarts'
 import { fetchDistributedData } from '../api/distributedService'
 import { fetchRelationalData } from '../api/relationalService'
 import { fetchGraphData } from '../api/graphService'
+import { ElMention, ElMessage, formatter } from 'element-plus'
 
 const queryForm = reactive({
   name: '',
-  releaseDate: [],
+  releaseDate: ['2000-1-1','2010-1-1'],
   version: '',
   directors: '',
   actors: '',
   style: '',
   positiveRate: 50,
-  score: [0, 5]
+  score: [0, 5],
+  limit:50
 })
-
-const showResults = ref(false)
-const searchResults = ref([])
+let loading=ref(false)
 const chartRef = ref(null)
 let chart = null
-const showLogs = ref(false)
-const logs = ref([])
-const currentPage = ref(1)
+const fenbulog=ref("暂无日志")
+const graphlog=ref("暂无日志")
+const rr=ref([])
+const dr=ref([])
+const gr=ref([])
 
 const validateScoreRange = () => {
   if (queryForm.score[1] < queryForm.score[0]) {
@@ -156,51 +196,58 @@ const validateScoreRange = () => {
 
 const handleSubmit = async () => {
   validateScoreRange()
-  
+  let relationalResponse = null
+  let distributedResponse = null
+  let graphResponse = null
+  let a=0
+  let b=0
+  let c=0
+  rr.value=[]
+  dr.value=[]
+  gr.value=[]
+  graphlog.value=""
+  fenbulog.value=""
+  loading.value=true
   try {
-    const [distributedResponse, relationalResponse, graphResponse] = await Promise.all([
-      fetchDistributedData(queryForm),
-      fetchRelationalData(queryForm),
-      fetchGraphData(queryForm),
-    ])
-
-    searchResults.value = [
-      ...distributedResponse.data.results,
-      ...relationalResponse.data.results,
-      ...graphResponse.data.results,
-    ]
-
-    updateChart([
-      distributedResponse.data.performance,
-      relationalResponse.data.performance,
-      graphResponse.data.performance,
-    ])
-
-    logs.value = [
-      distributedResponse.data.log,
-      relationalResponse.data.log,
-      graphResponse.data.log,
-    ].map(log => log.split('\n\n').map(entry => entry.replace(/\\n/g, '\n')))
-
-    showResults.value = true
+    relationalResponse =await fetchRelationalData(queryForm)
   } catch (error) {
-    console.error('查询失败:', error)
+    ElMessage({message:'关系型数据库查询失败',type: 'error'})
+  }
+  try {
+     distributedResponse= await fetchDistributedData(queryForm)
+  } catch (error) {
+    ElMessage({message:'分布式查询失败',type: 'error'})
+  }
+  try {
+    graphResponse =await fetchGraphData(queryForm)
+  } catch (error) {
+    ElMessage({message:'图数据库查询失败',type: 'error'})
     // ElMessage.error('查询失败，请稍后重试')
   }
-}
+  if (distributedResponse && distributedResponse.data ) {
+    a=distributedResponse.data.time
+    dr.value =distributedResponse.data.results
+    fenbulog.value=distributedResponse.data.report
+    ElMessage({message:"分布式数据库查询成功",type: 'success'})
+  }
 
-const toggleLogs = () => {
-  showLogs.value = !showLogs.value
-}
+  if (relationalResponse && relationalResponse.data ) {
+    b=relationalResponse.data.time
+    rr.value =relationalResponse.data.results
+    ElMessage({message:"关系型数据库查询成功",type: 'success'})
+  }
 
-const handlePageChange = (page) => {
-  currentPage.value = page
+  if (graphResponse && graphResponse.data ) {
+    c=graphResponse.data.time
+    gr.value =graphResponse.data.results
+    graphlog.value=graphResponse.data.report
+    ElMessage({message: '图数据库查询成功',type: 'success'})
+  }
+  updateChart([
+     a,b,c,
+  ])
+  loading.value=false
 }
-
-const paginatedLogs = computed(() => {
-  const start = currentPage.value - 1
-  return logs.value[start] || []
-})
 
 const updateChart = (performanceData) => {
   if (!chart) {
@@ -233,6 +280,12 @@ onMounted(() => {
     chart?.resize()
   })
 })
+
+function formatScore(row, column, cellValue) {
+    return cellValue ? cellValue.toFixed(2) : '-';
+  }
+
+
 </script>
 
 <style scoped>

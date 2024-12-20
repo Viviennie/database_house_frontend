@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const graphClient = axios.create({
-  baseURL: 'http://127.0.0.1:4523/m1/5525003-0-default/api/graph-backend-url',
+  baseURL: 'http://100.80.131.231:8000',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -9,19 +9,22 @@ const graphClient = axios.create({
 
 export const fetchGraphData = (queryForm) => {
   const formattedQuery = {
-    name: queryForm.name,
-    releaseDate: queryForm.releaseDate.map(date => 
-      date ? date.toISOString().split('T')[0] : null
-    ),
+    moviename: queryForm.name,
+    startTime: queryForm.releaseDate[0],
+    endTime: queryForm.releaseDate[1], 
     version: queryForm.version,
-    directors: queryForm.directors,
-    actors: queryForm.actors,
+    director: queryForm.directors,
+    actor: queryForm.actors,
     style: queryForm.style,
-    positiveRate: queryForm.positiveRate,
-    score: Array.from(queryForm.score),
-    limit: 10  // 限制返回结果数量
+    percent: queryForm.positiveRate,
+    lowscore: queryForm.score[0],
+    highscore: queryForm.score[1],
+    limit: queryForm.limit  // 限制返回结果数量
   };
 
-  console.log('图数据库查询参数:', JSON.stringify(formattedQuery, null, 2));
-  return graphClient.post('/search', formattedQuery);
+  //console.log('图数据库查询参数:', JSON.stringify(formattedQuery, null, 2));
+  const queryString = new URLSearchParams(formattedQuery).toString();
+
+  // 执行 GET 请求，将查询字符串附加到 URL 中
+  return graphClient.get(`/fullsearch?${queryString}`);
 }; 
