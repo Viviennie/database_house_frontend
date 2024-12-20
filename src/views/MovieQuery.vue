@@ -228,9 +228,9 @@ onMounted(async () => {
 
   // 读取 log.txt 文件内容
   try {
-    const response = await fetch('/src/assets/log.txt')
-    const text = await response.text()
-    logs.value = text.split('\n\n').map(log => log.replace(/\\n/g, '\n')) // 将日志内容按双换行分割为数组，并替换 \n 为换行
+    // const response = await fetch('/src/assets/log.txt')
+    // const text = await response.text()
+    // logs.value = text.split('\n\n').map(log => log.replace(/\\n/g, '\n')) // 将日志内容按双换行分割为数组，并替换 \n 为换行
   } catch (error) {
     console.error('无法读取日志文件:', error)
   }
