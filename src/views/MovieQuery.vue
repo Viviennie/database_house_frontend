@@ -27,7 +27,7 @@
         </el-form-item>
         
         <el-form-item label="导演">
-          <el-input v-model="queryForm.director" placeholder="请输入导演姓名" />
+          <el-input v-model="queryForm.directors" placeholder="请输入导演姓名" />
         </el-form-item>
         
         <el-form-item label="演员">
@@ -44,7 +44,7 @@
         
         <el-form-item label="电影总分">
           <el-input-number
-            v-model="queryForm.totalScore[0]"
+            v-model="queryForm.score[0]"
             :step="0.1"
             :max="5"
             :min="0"
@@ -54,7 +54,7 @@
           />
           <span style="margin: 0 10px;">至</span>
           <el-input-number
-            v-model="queryForm.totalScore[1]"
+            v-model="queryForm.score[1]"
             :step="0.1"
             :max="5"
             :min="0"
@@ -81,7 +81,13 @@
         <el-table :data="searchResults" style="width: 100%">
           <el-table-column prop="name" label="电影名称" />
           <el-table-column prop="releaseDate" label="上映时间" />
-          <el-table-column prop="movieId" label="电影ID" />
+          <!-- <el-table-column prop="movieId" label="电影ID" />
+          <el-table-column prop="directors" label="导演" />
+          <el-table-column prop="actors" label="演员" /> -->
+          <el-table-column prop="score" label="评分" />
+          <!-- <el-table-column prop="versions" label="版本" />
+          <el-table-column prop="style" label="风格" />
+          <el-table-column prop="asin" label="ASIN码" /> -->
         </el-table>
       </el-card>
 
@@ -127,10 +133,11 @@ const queryForm = reactive({
   name: '',
   releaseDate: [],
   version: '',
-  director: '',
+  directors: '',
   actors: '',
+  style: '',
   positiveRate: 50,
-  totalScore: [0, 5]
+  score: [0, 5]
 })
 
 const showResults = ref(false)
@@ -142,8 +149,8 @@ const logs = ref([])
 const currentPage = ref(1)
 
 const validateScoreRange = () => {
-  if (queryForm.totalScore[1] < queryForm.totalScore[0]) {
-    queryForm.totalScore[1] = queryForm.totalScore[0]
+  if (queryForm.score[1] < queryForm.score[0]) {
+    queryForm.score[1] = queryForm.score[0]
   }
 }
 
@@ -221,19 +228,10 @@ const updateChart = (performanceData) => {
   chart.setOption(option)
 }
 
-onMounted(async () => {
+onMounted(() => {
   window.addEventListener('resize', () => {
     chart?.resize()
   })
-
-  // 读取 log.txt 文件内容
-  try {
-    // const response = await fetch('/src/assets/log.txt')
-    // const text = await response.text()
-    // logs.value = text.split('\n\n').map(log => log.replace(/\\n/g, '\n')) // 将日志内容按双换行分割为数组，并替换 \n 为换行
-  } catch (error) {
-    console.error('无法读取日志文件:', error)
-  }
 })
 </script>
 

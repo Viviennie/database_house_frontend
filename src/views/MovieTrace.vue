@@ -15,8 +15,10 @@
         <el-form-item label="上映时间">
           <el-date-picker
             v-model="traceForm.releaseDate"
-            type="date"
-            placeholder="选择上映日期"
+            type="daterange"
+            range-separator="——"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
           />
         </el-form-item>
         
@@ -48,7 +50,7 @@ import { fetchDistributedData } from '../api/distributedService'
 
 const traceForm = reactive({
   name: '',
-  releaseDate: ''
+  releaseDate: []
 })
 
 const showResults = ref(false)
@@ -74,6 +76,7 @@ const handleTrace = async () => {
 .trace-container {
   padding: 80px 20px 20px;
   max-width: 1200px;
+  height: 90vh;
   margin: 0 auto;
 }
 
