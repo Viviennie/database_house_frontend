@@ -19,7 +19,7 @@ export const fetchRelationalData = (queryForm) => {
     percent: queryForm.positiveRate,
     lowscore: queryForm.score[0],
     highscore: queryForm.score[1],
-    limit: queryForm.limit  // 限制返回结果数量
+    limit: queryForm.limit || 100, // 默认限制为 100
   };
 
   //console.log('关系型数据库查询参数:', JSON.stringify(formattedQuery, null, 2));
@@ -36,3 +36,22 @@ export const traceRelationalData = (p) => {
   const queryString = new URLSearchParams(q).toString();
   return relationalClient.get(`/traceability?${queryString}`);
 }; 
+
+// 查询经常合作的演员组合（关系型数据库）
+export const fetchCooperatingActorsFromRelational = (params) => {
+  // 将查询参数转换为 URLSearchParams
+  const queryString = new URLSearchParams(params).toString();
+  return relationalClient.get(`/actor_actor?${queryString}`);
+}
+
+// 查询经常合作的导演和演员组合（关系型数据库）
+export const fetchCooperatingDirectorActorFromRelational = (params) => {
+  const queryString = new URLSearchParams(params).toString();
+  return relationalClient.get(`/actor_director?${queryString}`);
+}
+
+// 查询最受关注的演员组合（关系型数据库）
+export const fetchMostPopularActorsFromRelational = (params) => {
+  const queryString = new URLSearchParams(params).toString();
+  return relationalClient.get(`/query_favorite?${queryString}`);
+}
