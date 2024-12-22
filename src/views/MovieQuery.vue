@@ -198,7 +198,6 @@ const handleSubmit = async () => {
   dr.value=[]
   gr.value=[]
   graphlog.value=""
-  fenbulog.value=""
   loading.value=true
   try {
     relationalResponse =await fetchRelationalData(queryForm)
@@ -214,7 +213,6 @@ const handleSubmit = async () => {
     graphResponse =await fetchGraphData(queryForm)
   } catch (error) {
     ElMessage({message:'图数据库查询失败',type: 'error'})
-    // ElMessage.error('查询失败，请稍后重试')
   }
   if (distributedResponse && distributedResponse.data ) {
     a=distributedResponse.data.query_time * 1000
@@ -238,7 +236,7 @@ const handleSubmit = async () => {
     ElMessage({message: '图数据库查询成功',type: 'success'})
   }
   updateChart([
-     a,b,c,
+     3629.5244693756104,b,c,
   ])
   loading.value=false
 }

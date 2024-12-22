@@ -55,118 +55,38 @@
             </div>
           </template>
           <el-tabs >
-             <!-- 分布式数据库的结果 -->
-          <el-tab-pane label="分布式数据库的结果">
-            <el-table :data="dr" style="width: 100%; height: 600px;">
-              <!-- 根据 currentQueryType 动态显示列 -->
-              <el-table-column v-if="currentQueryType === 'actor'" prop="ACTOR_NAME_1" label="演员1" />
-              <el-table-column v-if="currentQueryType === 'actor'" prop="ACTOR_NAME_2" label="演员2" />
-              <el-table-column v-if="currentQueryType === 'actor'" prop="COOPERATION_COUNT" label="合作次数" />
-
-              <el-table-column v-if="currentQueryType === 'actorDirector'" prop="ACTOR_NAME" label="演员" />
-              <el-table-column v-if="currentQueryType === 'actorDirector'" prop="DIRECTOR_NAME" label="导演" />
-              <el-table-column v-if="currentQueryType === 'actorDirector'" prop="COOPERATION_COUNT" label="合作次数" />
-
-              <el-table-column v-if="currentQueryType === 'popular'" prop="actor_names" label="演员组合" />
-              <el-table-column v-if="currentQueryType === 'popular'" prop="movie_name" label="电影名称" />
-            </el-table>
-          </el-tab-pane>
-
           <!-- 关系型数据库的结果 -->
-          <el-tab-pane label="关系型数据库的结果">
-            <el-table :data="rr" style="width: 100%; height: 600px;">
-              <!-- 根据 currentQueryType 动态显示列 -->
-              <el-table-column v-if="currentQueryType === 'actor'" prop="ACTOR_NAME_1" label="演员1" />
-              <el-table-column v-if="currentQueryType === 'actor'" prop="ACTOR_NAME_2" label="演员2" />
-              <el-table-column v-if="currentQueryType === 'actor'" prop="COOPERATION_COUNT" label="合作次数" />
+            <el-tab-pane >
+              <el-table :data="rr" style="width: 100%; height: 600px;">
+                <!-- 根据 currentQueryType 动态显示列 -->
+                <el-table-column v-if="currentQueryType === 'actor'" prop="ACTOR_NAME_1" label="演员1" />
+                <el-table-column v-if="currentQueryType === 'actor'" prop="ACTOR_NAME_2" label="演员2" />
+                <el-table-column v-if="currentQueryType === 'actor'" prop="COOPERATION_COUNT" label="合作次数" />
 
-              <el-table-column v-if="currentQueryType === 'actorDirector'" prop="ACTOR_NAME" label="演员" />
-              <el-table-column v-if="currentQueryType === 'actorDirector'" prop="DIRECTOR_NAME" label="导演" />
-              <el-table-column v-if="currentQueryType === 'actorDirector'" prop="COOPERATION_COUNT" label="合作次数" />
+                <el-table-column v-if="currentQueryType === 'actorDirector'" prop="ACTOR_NAME" label="演员" />
+                <el-table-column v-if="currentQueryType === 'actorDirector'" prop="DIRECTOR_NAME" label="导演" />
+                <el-table-column v-if="currentQueryType === 'actorDirector'" prop="COOPERATION_COUNT" label="合作次数" />
 
-              <el-table-column v-if="currentQueryType === 'popular'" prop="actor_names" label="演员组合" />
-              <el-table-column v-if="currentQueryType === 'popular'" prop="movie_name" label="电影名称" />
-            </el-table>
-          </el-tab-pane>
-            <!-- 图数据库的结果 -->
-            <el-tab-pane label="图数据库的结果">
-                  <el-table :data="gr" style="width: 100%; height: 600px;">
-                    <!-- 根据 currentQueryType 动态显示列 -->
-                    <el-table-column v-if="currentQueryType === 'actor'" prop="ACTOR_NAME_1" label="演员1" />
-                    <el-table-column v-if="currentQueryType === 'actor'" prop="ACTOR_NAME_2" label="演员2" />
-                    <el-table-column v-if="currentQueryType === 'actor'" prop="COOPERATION_COUNT" label="合作次数" />
-
-                    <el-table-column v-if="currentQueryType === 'actorDirector'" prop="ACTOR_NAME" label="演员" />
-                    <el-table-column v-if="currentQueryType === 'actorDirector'" prop="DIRECTOR_NAME" label="导演" />
-                    <el-table-column v-if="currentQueryType === 'actorDirector'" prop="COOPERATION_COUNT" label="合作次数" />
-
-                    <el-table-column v-if="currentQueryType === 'popular'" prop="actor_names" label="演员组合" />
-                    <el-table-column v-if="currentQueryType === 'popular'" prop="movie_name" label="电影名称" />
-                  </el-table>
-                </el-tab-pane>
-
-          </el-tabs>
-        </el-card>
-  
-        <el-card class="performance-chart">
-          <template #header>
-            <div class="card-header">
-              <span>性能比较</span>
-            </div>
-          </template>
-          <div ref="chartRef" style="height: 400px"></div>
-        </el-card>
-  
-        <el-card v-if=true class="logs-card">
-          <template #header>
-            <div class="card-header" label-width="120px">
-              <span>查询日志</span>
-            </div>
-          </template>
-          <el-tabs >
-            <el-tab-pane label="分布式数据库的日志">
-              <div style="max-width: 100%;overflow-x: auto;">
-                <pre>{{fenbulog}}</pre>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="关系型数据库的日志">
-            <div style="max-width: 100%;overflow-x: auto;">
-              <pre>{{ relationlog }}</pre>
-            </div>
-          </el-tab-pane>
-            <el-tab-pane label="图数据库的日志">
-              <div style="max-width: 100%;overflow-x: auto;">
-                <pre>{{ graphlog }}</pre>
-              </div>
+                <el-table-column v-if="currentQueryType === 'popular'" prop="actor_names" label="演员组合" />
+                <el-table-column v-if="currentQueryType === 'popular'" prop="movie_name" label="电影名称" />
+              </el-table>
             </el-tab-pane>
           </el-tabs>
-        </el-card>
+        </el-card>  
       </div>
     </div>
   </template>
   
   <script setup>
-  import { ref, reactive, onMounted, computed } from 'vue'
-  import * as echarts from 'echarts'
-//   import {
-//   fetchCooperatingActorsFromDistributed,
-//   fetchCooperatingDirectorActorFromDistributed,
-//   fetchMostPopularActorsFromDistributed
-// } from '../api/distributedService'
-
+  import { ref, reactive, onMounted} from 'vue'
 import {
   fetchCooperatingActorsFromRelational,
   fetchCooperatingDirectorActorFromRelational,
   fetchMostPopularActorsFromRelational
 } from '../api/relationalService'
 
-import {
-  fetchCooperatingActorsFromGraph,
-  fetchCooperatingDirectorActorFromGraph,
-  fetchMostPopularActorsFromGraph
-} from '../api/graphService'
 
-  import { ElMention, ElMessage, formatter } from 'element-plus'
+  import { ElMessage } from 'element-plus'
   
   const queryForm = reactive({
     name: '',
@@ -180,14 +100,8 @@ import {
     limit:50
   })
   let loading=ref(false)
-  const chartRef = ref(null)
   let chart = null
-  const relationlog = ref("暂无日志")
-  const fenbulog=ref("暂无日志")
-  const graphlog=ref("暂无日志")
   const rr=ref([])
-  const dr=ref([])
-  const gr=ref([])
   const currentQueryType = ref('') // 当前查询类型，初始为空
   
   const validateScoreRange = () => {
@@ -200,27 +114,9 @@ import {
     currentQueryType.value = 'actor' // 设置当前查询类型为 "actor"
     loading.value = true
     try {
-    // 分布式数据库
-    // const distributedResponse = await fetchCooperatingActorsFromDistributed({ limit: queryForm.limit })
-    // dr.value = distributedResponse.data.data
-    // fenbulog.value = `分布式数据库查询时间: ${distributedResponse.data.time}ms`
 
-    // 关系型数据库
     const relationalResponse = await fetchCooperatingActorsFromRelational({ limit: queryForm.limit })
     rr.value = relationalResponse.data.data
-    relationlog.value = `关系型数据库查询时间: ${relationalResponse.data.time}ms`
-
-    // 图数据库
-    const graphResponse = await fetchCooperatingActorsFromGraph({ limit: queryForm.limit })
-    gr.value = graphResponse.data.data
-    graphlog.value = `图数据库查询时间: ${graphResponse.data.time}ms`
-    
-     // 更新性能比较图表
-     updateChart([
-      distributedResponse.data.time, // 分布式数据库查询时间
-      relationalResponse.data.time, // 关系型数据库查询时间
-      graphResponse.data.time // 图数据库查询时间
-    ])
 
     ElMessage({ message: "经常合作的演员组合查询成功", type: 'success' })
   } catch (error) {
@@ -234,27 +130,8 @@ import {
     currentQueryType.value = 'actorDirector' // 设置当前查询类型为 "actorDirector"
     loading.value = true
     try {
-      // 分布式数据库
-      // const distributedResponse = await fetchCooperatingDirectorActorFromDistributed({ limit: queryForm.limit })
-      // dr.value = distributedResponse.data.data
-      // fenbulog.value = `分布式数据库查询时间: ${distributedResponse.data.time}ms`
-
-      // 关系型数据库
       const relationalResponse = await fetchCooperatingDirectorActorFromRelational({ limit: queryForm.limit })
       rr.value = relationalResponse.data.data
-      relationlog.value = `关系型数据库查询时间: ${relationalResponse.data.time}ms`
-
-      // 图数据库
-      const graphResponse = await fetchCooperatingDirectorActorFromGraph({ limit: queryForm.limit })
-      gr.value = graphResponse.data.data
-      graphlog.value = `图数据库查询时间: ${graphResponse.data.time}ms`
-
-       // 更新性能比较图表
-      updateChart([
-        distributedResponse.data.time, // 分布式数据库查询时间
-        relationalResponse.data.time, // 关系型数据库查询时间
-        graphResponse.data.time // 图数据库查询时间
-      ])
       ElMessage({ message: "经常合作的导演和演员组合查询成功", type: 'success' })
     } catch (error) {
       ElMessage({ message: '查询失败，请稍后重试', type: 'error' })
@@ -267,26 +144,9 @@ import {
   currentQueryType.value = 'popular' // 设置当前查询类型为 "popular"
   loading.value = true
   try {
-    // 分布式数据库
-    // const distributedResponse = await fetchMostPopularActorsFromDistributed({ style: queryForm.style, num: queryForm.num, limit: queryForm.limit })
-    // dr.value = distributedResponse.data.data
-    // fenbulog.value = `分布式数据库查询时间: ${distributedResponse.data.time}ms`
 
-    // 关系型数据库
     const relationalResponse = await fetchMostPopularActorsFromRelational({ style: queryForm.style, num: queryForm.num, limit: queryForm.limit })
     rr.value = relationalResponse.data.data
-    relationlog.value = `关系型数据库查询时间: ${relationalResponse.data.time}ms`
-    // 图数据库
-    const graphResponse = await fetchMostPopularActorsFromGraph({ style: queryForm.style, num: queryForm.num, limit: queryForm.limit })
-    gr.value = graphResponse.data.data
-    graphlog.value = `图数据库查询时间: ${graphResponse.data.time}ms`
-
-     // 更新性能比较图表
-     updateChart([
-      distributedResponse.data.time, // 分布式数据库查询时间
-      relationalResponse.data.time, // 关系型数据库查询时间
-      graphResponse.data.time // 图数据库查询时间
-    ])
 
     ElMessage({ message: "最受关注的演员组合查询成功", type: 'success' })
   } catch (error) {
@@ -296,41 +156,12 @@ import {
   }
  }
   
-  const updateChart = (performanceData) => {
-    if (!chart) {
-      chart = echarts.init(chartRef.value)
-    }
-    
-    const option = {
-      title: {
-        text: '数据仓库查询性能比较'
-      },
-      tooltip: {},
-      xAxis: {
-        data: ['分布式数据仓库', '关系型数据仓库', '图数据仓库']
-      },
-      yAxis: {
-        name: '查询时间(ms)'
-      },
-      series: [{
-        name: '查询时间',
-        type: 'bar',
-        data: performanceData
-      }]
-    }
-    
-    chart.setOption(option)
-  }
   
   onMounted(() => {
     window.addEventListener('resize', () => {
       chart?.resize()
     })
   })
-  
-  function formatScore(row, column, cellValue) {
-      return cellValue ? cellValue.toFixed(2) : '-';
-    }
   
   
   </script>
