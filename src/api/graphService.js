@@ -6,12 +6,18 @@ const graphClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');  // 月份从0开始，需加1
+  const day = String(date.getDate()).padStart(2, '0');         // 补齐日期
 
+  return `${year}-${month}-${day}`;  // 格式化为 YYYY-MM-DD
+}
 export const fetchGraphData = (queryForm) => {
   const formattedQuery = {
     moviename: queryForm.name,
-    startTime: queryForm.releaseDate[0],
-    endTime: queryForm.releaseDate[1], 
+    startTime: formatDate(queryForm.releaseDate[0]),
+    endTime: formatDate(queryForm.releaseDate[1]), 
     version: queryForm.version,
     director: queryForm.directors,
     actor: queryForm.actors,
