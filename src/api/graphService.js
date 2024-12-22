@@ -41,7 +41,7 @@ export const traceGraphData = (p) => {
 export const fetchCooperatingActorsFromGraph = (params) => {
   const queryString = new URLSearchParams(params).toString();
   return graphClient.get(`/actor_actor?${queryString}`);
-
+}
 // 查询经常合作的导演和演员组合（关系型数据库）
 export const fetchCooperatingDirectorActorFromGraph = (params) => {
   const queryString = new URLSearchParams(params).toString();

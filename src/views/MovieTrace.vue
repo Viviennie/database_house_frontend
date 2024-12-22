@@ -59,10 +59,11 @@
        <p>ID: {{ selectedMovie.id }}</p>
        <p>上映时间: {{ selectedMovie.time }}</p>
        <p>ASIN: 
-         <template v-for="(asin, index) in selectedMovie.asin" :key="index">
-          <a :href="formatAmazonUrl(asin)" target="_blank">{{ formatAmazonUrl(asin) }}</a>
-          <span v-if="index < selectedMovie.asin.length - 1">, </span>
-         </template>
+          <template v-for="(asin, index) in selectedMovie.asin" :key="index">
+            <div style="margin-bottom: 5px;"> <!-- 或使用其他合适的容器 -->
+             <a :href="formatAmazonUrl(asin)" target="_blank">{{ formatAmazonUrl(asin) }}</a>
+            </div>
+          </template>
        </p>
        <div class="detail-section">
        <h4>演员信息</h4>
@@ -183,5 +184,13 @@ const formatAmazonUrl = (asin) => `http://amazon.com/dp/${asin}`
 .trace-results{
   width: 1200px;
 
+}
+.detail-content{
+  width: 1000px;
+  padding: 30px;
+}
+h3 {
+  word-wrap: break-word;
+  word-break: break-word;
 }
 </style> 

@@ -141,11 +141,6 @@
           </div>
         </template>
         <el-tabs >
-          <el-tab-pane label="分布式数据库的日志">
-            <div style="max-width: 100%;overflow-x: auto;">
-              <pre>{{fenbulog}}</pre>
-            </div>
-          </el-tab-pane>
           <el-tab-pane label="图数据库的日志">
             <div style="max-width: 100%;overflow-x: auto;">
               <pre>{{ graphlog }}</pre>
@@ -179,7 +174,6 @@ const queryForm = reactive({
 let loading=ref(false)
 const chartRef = ref(null)
 let chart = null
-const fenbulog=ref("暂无日志")
 const graphlog=ref("暂无日志")
 const rr=ref([])
 const dr=ref([])
@@ -225,7 +219,6 @@ const handleSubmit = async () => {
   if (distributedResponse && distributedResponse.data ) {
     a=distributedResponse.data.query_time * 1000
     dr.value =distributedResponse.data.results
-    fenbulog.value=distributedResponse.data.report
     len.value[0]=distributedResponse.data.num
     ElMessage({message:"分布式数据库查询成功",type: 'success'})
   }
