@@ -25,7 +25,9 @@
         <el-form-item label="电影版本">
           <el-input v-model="queryForm.version" placeholder="请输入电影版本" />
         </el-form-item>
-        
+        <el-form-item label="电影类型">
+          <el-input v-model="queryForm.style" placeholder="请输入电影类型" />
+        </el-form-item>
         <el-form-item label="导演">
           <el-input v-model="queryForm.directors" placeholder="请输入导演姓名" />
         </el-form-item>
@@ -203,16 +205,19 @@ const handleSubmit = async () => {
     relationalResponse =await fetchRelationalData(queryForm)
   } catch (error) {
     ElMessage({message:'关系型数据库查询失败',type: 'error'})
+    console.log(error)
   }
   try {
      distributedResponse= await fetchDistributedData(queryForm)
   } catch (error) {
     ElMessage({message:'分布式查询失败',type: 'error'})
+    console.log(error)
   }
   try {
     graphResponse =await fetchGraphData(queryForm)
   } catch (error) {
     ElMessage({message:'图数据库查询失败',type: 'error'})
+    console.log(error)
   }
   if (distributedResponse && distributedResponse.data ) {
     a=distributedResponse.data.query_time * 1000
@@ -236,7 +241,7 @@ const handleSubmit = async () => {
     ElMessage({message: '图数据库查询成功',type: 'success'})
   }
   updateChart([
-     3629.5244693756104,b,c,
+     b,c,a
   ])
   loading.value=false
 }
@@ -252,7 +257,7 @@ const updateChart = (performanceData) => {
     },
     tooltip: {},
     xAxis: {
-      data: ['分布式数据仓库', '关系型数据仓库', '图数据仓库']
+      data: ['关系型数据仓库', '图数据仓库','分布式数据仓库']
     },
     yAxis: {
       name: '查询时间(ms)'
