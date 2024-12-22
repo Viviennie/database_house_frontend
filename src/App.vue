@@ -15,9 +15,12 @@ import NavBar from './components/NavBar.vue'
 
 <style>
 :root {
-  --primary-color: #072747;
-  --background-color: #cad8ee;
+  --primary-color: #2b455f;
+  --background-color: #e4edfc;
+  
+  --secondary-color: #4c98da;
 }
+
 
 .app-container {
   position: absolute;

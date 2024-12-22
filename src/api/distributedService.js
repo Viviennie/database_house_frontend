@@ -46,7 +46,7 @@ export const fetchDistributedData = (queryForm) => {
   return Promise.resolve({ data: mockData });
   
   // 实际的 API 调用（暂时注释）
-  // return distributedClient.post('/search', formattedQuery);
+  // return distributedClient.post('/query_movie', formattedQuery);
 }; 
 
 export const fetchActorCooperation = (actor1, actor2) => {
@@ -93,7 +93,7 @@ export const fetchFavoriteActors = (params) => {
 
   return Promise.resolve({ data: mockData });
 
-  // 实际的 API 调用（暂时注释）
+   // 实际的 API 调用（暂时注释）
   // return distributedClient.get('/query_favorite', { params });
 };
 
@@ -116,6 +116,52 @@ export const fetchDirectorActorCooperation = (director, actor) => {
 
   return Promise.resolve({ data: mockData });
   
-  // 实际的 API 调用（暂时注释）
+   // 实际的 API 调用（暂时注释）
   // return distributedClient.get('/actor_director', { params });
+}; 
+
+// 添加新的溯源接口
+export const fetchDistributedTrace = (queryForm) => {
+  console.log('分布式数据仓库溯源查询参数:', JSON.stringify(queryForm, null, 2));
+
+  // 测试数据
+  const mockData = {
+    results: [
+      {
+        "actor": [
+          {
+            "asin": ["B0002TV2WY"],
+            "name": "Rupert Grint"
+          },
+          {
+            "asin": ["B0002TV2WY"],
+            "name": "Daniel Radcliffe"
+          }
+        ],
+        "asin": ["B0002TV2WY"],
+        "director": [
+          {
+            "asin": ["B0002TV2WY"],
+            "name": "Chris Columbus"
+          }
+        ],
+        "id": 27705,
+        "movie_name": "Harry Potter - Years 1-3 Collection",
+        "time": "2004-11-23",
+        "timehistroy": "网页",
+        "timesource": "B0002TV2WY",
+        "version": [
+          {
+            "asin": ["B0002TV2WY"],
+            "name": "Full Screen Edition"
+          }
+        ]
+      }
+    ]
+  };
+
+  return Promise.resolve({ data: mockData });
+  
+  // 实际的 API 调用（暂时注释）
+  // return distributedClient.post('/trace', queryForm);
 }; 

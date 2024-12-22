@@ -118,3 +118,48 @@ export const fetchDirectorActorCooperation = (director, actor) => {
   // 实际的 API 调用（暂时注释）
   // return relationalClient.get('/actor_director', { params });
 }; 
+
+export const fetchRelationalTrace = (queryForm) => {
+  console.log('关系型数据仓库溯源查询参数:', JSON.stringify(queryForm, null, 2));
+
+  // 测试数据
+  const mockData = {
+    results: [
+      {
+        "actor": [
+          {
+            "asin": ["B000ZLFALS"],
+            "name": "Tom Cruise"
+          },
+          {
+            "asin": ["B000ZLFALS"],
+            "name": "Nicole Kidman"
+          }
+        ],
+        "asin": ["B000ZLFALS"],
+        "director": [
+          {
+            "asin": ["B000ZLFALS"],
+            "name": "Stanley Kubrick"
+          }
+        ],
+        "id": 27706,
+        "movie_name": "Eyes Wide Shut",
+        "time": "1999-07-16",
+        "timehistroy": "网页",
+        "timesource": "B000ZLFALS",
+        "version": [
+          {
+            "asin": ["B000ZLFALS"],
+            "name": "Unrated Edition"
+          }
+        ]
+      }
+    ]
+  };
+
+  return Promise.resolve({ data: mockData });
+  
+  // 实际的 API 调用（暂时注释）
+  // return relationalClient.post('/trace', queryForm);
+}; 

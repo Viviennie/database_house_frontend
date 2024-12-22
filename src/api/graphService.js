@@ -117,4 +117,53 @@ export const fetchDirectorActorCooperation = (director, actor) => {
   
   // 实际的 API 调用（暂时注释）
   // return graphClient.get('/actor_director', { params });
+};
+
+export const fetchGraphTrace = (queryForm) => {
+  console.log('图数据库溯源查询参数:', JSON.stringify(queryForm, null, 2));
+
+  // 测试数据
+  const mockData = {
+    results: [
+      {
+        "actor": [
+          {
+            "asin": ["B07FDKRJQC"],
+            "name": "Robert Downey Jr."
+          },
+          {
+            "asin": ["B07FDKRJQC"],
+            "name": "Chris Evans"
+          }
+        ],
+        "asin": ["B07FDKRJQC"],
+        "director": [
+          {
+            "asin": ["B07FDKRJQC"],
+            "name": "Anthony Russo"
+          },
+          {
+            "asin": ["B07FDKRJQC"],
+            "name": "Joe Russo"
+          }
+        ],
+        "id": 27707,
+        "movie_name": "Avengers: Infinity War",
+        "time": "2018-04-27",
+        "timehistroy": "网页",
+        "timesource": "B07FDKRJQC",
+        "version": [
+          {
+            "asin": ["B07FDKRJQC"],
+            "name": "4K Ultra HD"
+          }
+        ]
+      }
+    ]
+  };
+
+  return Promise.resolve({ data: mockData });
+  
+  // 实际的 API 调用（暂时注释）
+  // return graphClient.post('/trace', queryForm);
 }; 

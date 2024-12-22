@@ -639,14 +639,17 @@ watch(queryType, () => {
 }
 
 .results-container {
-  width: 90%; /* 修这里，增加结果区域宽度 */
+  display: flex;
+  flex-direction: column;  /* 设置为竖直方向 */
+  width: 90%; 
   max-width: 1400px; /* 增加最大宽度 */
   margin: 0 auto;
-  display: grid;
   gap: 20px;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
 }
 
+.result-list,
+.performance-chart,
 .logs-card {
   margin-top: 20px;
   width: 90%; /* 修改这里，增加表单宽度 */
@@ -692,8 +695,11 @@ watch(queryType, () => {
 }
 
 .database-selector {
-  margin-bottom: 20px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
   width: 100%;
+  margin-bottom: 0px;
+  flex-wrap: wrap;
 }
+
 </style> 

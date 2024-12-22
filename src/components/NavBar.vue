@@ -4,9 +4,9 @@
     class="nav-menu"
     mode="horizontal"
     router
-    background-color="#409EFF"
+    :background-color="'var(--primary-color)'"  
     text-color="#fff"
-    active-text-color="#ffd04b"
+    active-text-color="var(--secondary-color)" 
   >
     <el-menu-item index="/movie-query">
       <el-icon><Search /></el-icon>
@@ -42,5 +42,10 @@ watch(() => route.path, (newPath) => {
   top: 0;
   width: 100%;
   z-index: 1000;
+}
+/* 添加悬停效果 */
+:deep(.el-menu-item:hover) {
+  background-color: var(--secondary-color) !important;
+  color: #ffffff !important;
 }
 </style> 
