@@ -58,9 +58,3 @@ export const fetchCooperatingDirectorActorFromRelational = (params) => {
   const queryString = new URLSearchParams(params).toString();
   return relationalClient.get(`/actor_director?${queryString}`);
 }
-
-// 查询最受关注的演员组合（关系型数据库）
-export const fetchMostPopularActorsFromRelational = (params) => {
-  const queryString = new URLSearchParams(params).toString();
-  return relationalClient.get(`/query_favorite?${queryString}`);
-}

@@ -68,7 +68,7 @@
                 <el-table-column v-if="currentQueryType === 'actorDirector'" prop="COOPERATION_COUNT" label="合作次数" />
 
                 <el-table-column v-if="currentQueryType === 'popular'" prop="actor_names" label="演员组合" />
-                <el-table-column v-if="currentQueryType === 'popular'" prop="movie_name" label="电影名称" />
+                <el-table-column v-if="currentQueryType === 'popular'" prop="count" label="评论总数" />
               </el-table>
             </el-tab-pane>
           </el-tabs>
@@ -82,9 +82,10 @@
 import {
   fetchCooperatingActorsFromRelational,
   fetchCooperatingDirectorActorFromRelational,
-  fetchMostPopularActorsFromRelational
 } from '../api/relationalService'
-
+import {
+  fetchMostPopularActorsFromRelational
+} from '../api/graphService'
 
   import { ElMessage } from 'element-plus'
   

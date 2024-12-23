@@ -46,19 +46,9 @@ export const traceGraphData = (p) => {
   return graphClient.get(`/datatrace?${queryString}`);
 }; 
 
-// 查询经常合作的演员组合（关系型数据库）
-export const fetchCooperatingActorsFromGraph = (params) => {
-  const queryString = new URLSearchParams(params).toString();
-  return graphClient.get(`/actor_actor?${queryString}`);
-}
-// 查询经常合作的导演和演员组合（关系型数据库）
-export const fetchCooperatingDirectorActorFromGraph = (params) => {
-  const queryString = new URLSearchParams(params).toString();
-  return graphClient.get(`/actor_director?${queryString}`);
-}
 
 // 查询最受关注的演员组合（关系型数据库）
-export const fetchMostPopularActorsFromGraph = (params) => {
+export const fetchMostPopularActorsFromRelational = (params) => {
   const queryString = new URLSearchParams(params).toString();
   return graphClient.get(`/query_favorite?${queryString}`);
 }

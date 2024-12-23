@@ -58,6 +58,11 @@
        <h3>{{ selectedMovie.movie_name }}</h3>
        <p>ID: {{ selectedMovie.id }}</p>
        <p>上映时间: {{ selectedMovie.time }}</p>
+       <div style="display: flex;justify-content: center;align-items: center;">
+          <p style="margin-right: 15px;">来源:</p>
+          <a :href="formatAmazonUrl( selectedMovie.timesource )" target="_blank" style="margin-right: 15px;">{{formatAmazonUrl( selectedMovie.timesource )}} </a>
+          <p>   {{selectedMovie.timehistroy}}</p>
+        </div>     
        <p>ASIN: 
           <template v-for="(asin, index) in selectedMovie.asin" :key="index">
             <div style="margin-bottom: 5px;"> <!-- 或使用其他合适的容器 -->
